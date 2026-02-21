@@ -80,6 +80,7 @@ local function nvim_tree_menu(node)
   -- Clears the menu and prevents "Press ENTER"
   vim.cmd('redraw')
 end
+local _nvim_tree_saved_width = nil
 require("nvim-tree").setup({
   on_attach = function(bufnr)
     local api = require("nvim-tree.api")
@@ -93,6 +94,18 @@ require("nvim-tree").setup({
       local node = api.tree.get_node_under_cursor()
       nvim_tree_menu(node)
     end, opts("Show Menu"))
+    -- Shift-A inside tree: toggle sidebar width
+    vim.keymap.set("n", "A", function()
+      local winnr = require("nvim-tree.view").get_winnr()
+      if not winnr then return end
+      if _nvim_tree_saved_width then
+        vim.api.nvim_win_set_width(winnr, _nvim_tree_saved_width)
+        _nvim_tree_saved_width = nil
+      else
+        _nvim_tree_saved_width = vim.api.nvim_win_get_width(winnr)
+        vim.api.nvim_win_set_width(winnr, _nvim_tree_saved_width * 2)
+      end
+    end, opts("Toggle tree width"))
   end,
 })
 
