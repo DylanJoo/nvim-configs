@@ -39,6 +39,12 @@ vim.opt.timeoutlen = 500
 
 -- Clipboard
 vim.opt.clipboard = 'unnamed'
+vim.g.clipboard = {
+  name = 'pbcopy',
+  copy  = { ['+'] = 'pbcopy', ['*'] = 'pbcopy' },
+  paste = { ['+'] = 'pbpaste', ['*'] = 'pbpaste' },
+  cache_enabled = 0,
+}
 
 -- Window sizing
 vim.opt.laststatus = 2
